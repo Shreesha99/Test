@@ -6,20 +6,20 @@
     <title>Smoke Timer</title>
 
     <link rel="manifest" href="manifest.json" />
-
-    <!-- BOOTSTRAP ICONS -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
-    <!-- iOS APP META -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Smoke Timer" />
     <link
       rel="apple-touch-icon"
       href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6ac.png"
     />
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
 
     <style>
       :root {
@@ -29,28 +29,22 @@
         --border: rgba(255, 255, 255, 0.14);
         --text: #fff;
       }
-
       body.night {
         --bg: #060606;
         --panel: #0d0d0d;
-        --accent: #4ade80;
-        --border: rgba(255, 255, 255, 0.12);
         --text: #f5f5f5;
       }
-
       body {
         margin: 0;
         background: var(--bg);
         color: var(--text);
         font-family: -apple-system, system-ui;
       }
-
       .shell {
         max-width: 520px;
         margin: 0 auto;
         padding: 10px 10px 18px;
       }
-
       .card {
         background: var(--panel);
         border: 1px solid var(--border);
@@ -58,37 +52,31 @@
         box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
         padding: 20px;
       }
-
       h1 {
         margin: 0 0 6px;
         font-size: 1.25rem;
       }
-
       .sub {
         opacity: 0.75;
         font-size: 0.8rem;
         margin-bottom: 6px;
       }
-
       .circle {
         width: 190px;
         height: 190px;
         margin: 8px auto 6px;
         position: relative;
       }
-
       svg {
         width: 190px;
         height: 190px;
         transform: rotate(-90deg);
       }
-
       .bg {
         stroke: rgba(255, 255, 255, 0.16);
         stroke-width: 10;
         fill: none;
       }
-
       .fg {
         stroke: var(--accent);
         stroke-width: 10;
@@ -96,7 +84,6 @@
         fill: none;
         transition: stroke-dashoffset 0.6s ease;
       }
-
       .timerText {
         position: absolute;
         inset: 0;
@@ -105,7 +92,6 @@
         justify-content: center;
         font-size: 2.2rem;
       }
-
       .btn {
         width: 100%;
         padding: 14px;
@@ -115,28 +101,23 @@
         font-size: 1rem;
         cursor: pointer;
       }
-
       .primary {
         background: var(--accent);
         color: #000;
       }
-
       .secondary {
         background: #38bdf8;
         color: #000;
       }
-
       .danger {
         background: #ef4444;
         color: #fff;
       }
-
       .info {
         font-size: 0.85rem;
         margin: 4px 0 8px;
         min-height: 18px;
       }
-
       .badge {
         display: inline-block;
         padding: 4px 10px;
@@ -144,29 +125,24 @@
         font-size: 0.75rem;
         margin-top: 4px;
       }
-
       .badge.good {
         background: #064e3b;
         color: #4ade80;
       }
-
       .badge.warn {
         background: #45240e;
         color: #fbbf24;
       }
-
       .badge.danger {
         background: #3b0b0b;
         color: #f87171;
       }
-
       .pills {
         display: flex;
         gap: 6px;
         flex-wrap: wrap;
         margin-top: 10px;
       }
-
       .pill {
         padding: 6px 10px;
         border-radius: 30px;
@@ -175,18 +151,15 @@
         opacity: 0.75;
         cursor: pointer;
       }
-
       .pill.active {
         background: rgba(255, 255, 255, 0.12);
         opacity: 1;
       }
-
       .sectionTitle {
         margin: 14px 0 4px;
         font-size: 0.95rem;
         opacity: 0.95;
       }
-
       .metricBox {
         border: 1px solid var(--border);
         border-radius: 14px;
@@ -194,21 +167,18 @@
         margin-top: 6px;
         background: #101010;
       }
-
       .metric {
         display: flex;
         justify-content: space-between;
         font-size: 0.85rem;
         margin: 4px 0;
       }
-
       .barWrap {
         margin-top: 6px;
         height: 10px;
         border-radius: 10px;
         background: #232323;
       }
-
       .bar {
         height: 100%;
         border-radius: 10px;
@@ -216,7 +186,6 @@
         width: 0%;
         transition: 0.35s;
       }
-
       .funCard {
         display: flex;
         align-items: center;
@@ -227,24 +196,20 @@
         border-radius: 12px;
         border: 1px solid #1f1f1f;
       }
-
       .funCard span {
         font-size: 0.8rem;
         opacity: 0.85;
       }
-
       .canvasWrap {
         margin-top: 10px;
         border: 1px solid var(--border);
         border-radius: 14px;
         padding: 10px;
       }
-
       canvas {
         width: 100%;
         height: 130px;
       }
-
       .row {
         display: flex;
         justify-content: space-between;
@@ -252,16 +217,14 @@
         margin: 8px 0;
         font-size: 0.85rem;
       }
-
-      input[type="number"] {
+      input[type="number"],
+      select {
         background: #0d0d0d;
         border: 1px solid #333;
         color: #fff;
         padding: 6px 8px;
         border-radius: 8px;
-        width: 90px;
       }
-
       .toggle {
         appearance: none;
         width: 36px;
@@ -271,11 +234,9 @@
         cursor: pointer;
         position: relative;
       }
-
       .toggle:checked {
         background: #4ade80;
       }
-
       .toggle:before {
         content: "";
         position: absolute;
@@ -287,11 +248,9 @@
         background: #fff;
         transition: 0.2s;
       }
-
       .toggle:checked:before {
         transform: translateX(16px);
       }
-
       .toast {
         position: fixed;
         bottom: 16px;
@@ -305,9 +264,58 @@
         box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
         transition: 0.32s;
       }
-
       .toast.show {
         transform: translateX(-50%) translateY(0);
+      }
+
+      .urge-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        margin: 6px 0;
+      }
+      .urge-btn {
+        padding: 8px 0;
+        border: 1px solid #2b2b2b;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 0.75rem;
+        cursor: pointer;
+        background: #111;
+      }
+      .urge-btn span {
+        display: block;
+        font-size: 1.2rem;
+      }
+      .urge-btn.active {
+        background: #1f2937;
+        border-color: #4ade80;
+      }
+      .urge-label {
+        text-align: center;
+        opacity: 0.75;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        min-height: 18px;
+      }
+      .reason-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .reason {
+        background: #0f172a;
+        border: 1px solid #2a2a2a;
+        border-radius: 10px;
+        padding: 6px;
+        text-align: center;
+        font-size: 0.75rem;
+        cursor: pointer;
+      }
+      .reason.active {
+        border-color: #4ade80;
+        background: #1f2937;
       }
     </style>
   </head>
@@ -320,6 +328,24 @@
       <div style="opacity: 0.7; margin-top: 4px; font-size: 0.9rem">
         “One hour at a time. Small wins add up.”
       </div>
+    </div>
+
+    <div
+      style="
+        margin: 10px auto 6px;
+        max-width: 520px;
+        font-size: 0.85rem;
+        opacity: 0.85;
+        background: #111;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 10px 12px;
+      "
+    >
+      This isn’t about smoking more “safely”. It’s about building control —
+      stretching the gap, skipping when you can, and reducing step-by-step. I
+      built this for myself first… and for anyone else trying to slowly take
+      their life back. No pressure — just progress ❤️
     </div>
 
     <div class="shell">
@@ -346,35 +372,46 @@
         <div id="presets" class="pills"></div>
         <div id="status" class="info"></div>
 
+        <button
+          id="skip"
+          class="btn"
+          style="margin-top: 6px; background: #1f2937; color: #fff"
+          title="Log this cigarette as resisted. Example: If you felt like smoking but waited it out, this counts as a win and improves your streak — nothing gets added to your daily total."
+        >
+          👍 Skip this cigarette
+        </button>
+
         <div class="sectionTitle">Today</div>
         <div class="metricBox">
           <div class="metric">
             <span>Cigarettes</span><span id="today"></span>
           </div>
-
-          <div class="barWrap">
-            <div id="limitBar" class="bar"></div>
-          </div>
+          <div class="barWrap"><div id="limitBar" class="bar"></div></div>
           <div id="limitBadge" class="badge good">Under limit</div>
-
           <div class="funCard">🚬 <span id="moneyToday"></span></div>
           <div class="funCard">❤️ <span id="lifeToday"></span></div>
           <div class="funCard">👟 <span id="stepsToday"></span></div>
+          <div class="funCard">⏳ <span id="timeSaved"></span></div>
+          <div class="funCard">👍 <span id="skipsCount"></span></div>
         </div>
 
         <div class="sectionTitle">Progress</div>
         <div class="metricBox">
           <div class="metric"><span>Streak</span><span id="streak"></span></div>
-
           <div class="canvasWrap">
             <canvas id="chart"></canvas>
             <div class="sub">Last 7 days</div>
           </div>
-
           <div class="sub" id="recent"></div>
         </div>
 
-        <!-- ACHIEVEMENTS -->
+        <div class="funCard">
+          🏁 Longest cooldown: <span id="bestGap"></span>
+        </div>
+
+        <div class="sectionTitle">Insights</div>
+        <div class="metricBox" id="insights"></div>
+
         <div class="sectionTitle">Achievements</div>
         <div class="metricBox" id="achievements"></div>
 
@@ -383,10 +420,35 @@
           <div class="row">
             <span>Daily limit</span><input id="limit" type="number" min="1" />
           </div>
+
           <div class="row">
             <span>Silent mode</span
             ><input id="silent" type="checkbox" class="toggle" />
           </div>
+
+          <div class="row">
+            <span>Reminder (10am)</span>
+            <input id="reminder" type="checkbox" class="toggle" />
+          </div>
+
+          <div class="row">
+            <span>Sound</span>
+            <select id="soundSel">
+              <option value="ding">Ding</option>
+              <option value="soft">Soft</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <span>Currency</span>
+            <select id="currency">
+              <option value="₹">₹</option>
+              <option value="$">$</option>
+              <option value="€">€</option>
+            </select>
+          </div>
+
           <div class="row">
             <span>Price per pack</span
             ><input id="price" type="number" min="1" />
@@ -399,25 +461,46 @@
             <span>Add preset (min)</span
             ><input id="addPreset" type="number" min="1" />
           </div>
+
+          <div class="row">
+            <span>Night mode</span
+            ><input id="manualNight" type="checkbox" class="toggle" />
+          </div>
+
           <div class="row">
             <span>Backup data</span
             ><input id="file" type="file" accept="application/json" />
           </div>
 
           <button id="export" class="btn secondary">Export</button>
+
+          <button id="driveLogin" class="btn secondary">
+            Sign in with Google
+          </button>
+          <button id="driveBackup" class="btn">Backup to Drive</button>
+          <button id="driveRestore" class="btn">Restore from Drive</button>
+
           <button id="undo" class="btn">Undo last log</button>
 
           <button id="clearToday" class="btn danger">
             <i class="bi bi-trash"></i> Clear today
           </button>
-
           <button id="clearAll" class="btn danger">
-            <i class="bi bi-trash"></i> Clear ALL history
+            <i class="bi bi-trash"></i> Clear all history
           </button>
         </div>
 
         <div class="sub" style="margin-top: 6px">
           Not medical advice — just fun estimates. Skipping one is a win 🎯
+        </div>
+
+        <div class="sub" style="margin-top: 6px; color: #fbbf24">
+          <b>Disclaimer:</b> This app is a harm-reduction tool meant to help you
+          cut down and eventually quit. It does <b>not</b> encourage smoking
+          during the cooldown — the goal is to increase the gap, build control,
+          and smoke less. This is not medical advice, and you use it at your own
+          risk. I am not responsible for any decisions, outcomes, or health
+          issues that may occur.
         </div>
       </div>
     </div>
@@ -429,6 +512,113 @@
     </audio>
 
     <script>
+      let googleUser = null;
+      const CLIENT_ID =
+        "424180784069-bo0lo5dms4vcn59mianh5j7oa85nioou.apps.googleusercontent.com";
+      const API_KEY = "AIzaSyBjN0DWe-DASx8aOv4jrq0YIbv3Vsf56R8";
+      const SCOPE = "https://www.googleapis.com/auth/drive.file";
+      function loadGapi() {
+        return new Promise((resolve) => {
+          gapi.load("client", async () => {
+            await gapi.client.init({
+              apiKey: API_KEY,
+              discoveryDocs: [
+                "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+              ],
+            });
+            resolve();
+          });
+        });
+      }
+      const driveLogin = $("driveLogin");
+
+      driveLogin.onclick = async () => {
+        await loadGapi();
+
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: SCOPE,
+          callback: (t) => (googleUser = t),
+        });
+
+        tokenClient.requestAccessToken();
+      };
+      const driveBackup = $("driveBackup");
+
+      driveBackup.onclick = async () => {
+        if (!googleUser) return show("Sign in first");
+
+        await loadGapi();
+
+        const data = {
+          daily: daily(),
+          history: history(),
+          presets: jget("presets", [60, 45, 90]),
+          urgeLog: urgeLog(),
+          skips: skipLog(),
+        };
+
+        const file = new Blob([JSON.stringify(data)], {
+          type: "application/json",
+        });
+
+        const form = new FormData();
+        form.append(
+          "metadata",
+          new Blob(
+            [
+              JSON.stringify({
+                name: "smoketimer-backup.json",
+                mimeType: "application/json",
+              }),
+            ],
+            { type: "application/json" }
+          )
+        );
+        form.append("file", file);
+
+        await fetch(
+          "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+          {
+            method: "POST",
+            headers: { Authorization: `Bearer ${googleUser.access_token}` },
+            body: form,
+          }
+        );
+
+        show("Backed up to Drive");
+      };
+      const driveRestore = $("driveRestore");
+
+      driveRestore.onclick = async () => {
+        if (!googleUser) return show("Sign in first");
+
+        await loadGapi();
+
+        // find our backup file
+        const res = await gapi.client.drive.files.list({
+          q: "name='smoketimer-backup.json'",
+          fields: "files(id,name)",
+          spaces: "drive",
+        });
+
+        if (!res.result.files?.length) return show("No backup found");
+
+        const fileId = res.result.files[0].id;
+
+        const download = await gapi.client.drive.files.get({
+          fileId,
+          alt: "media",
+        });
+
+        const data = JSON.parse(download.body);
+
+        Object.entries(data).forEach(([k, v]) => jset(k, v));
+
+        show("Restored from Drive");
+        location.reload();
+      };
+
       const $ = (id) => document.getElementById(id);
       const jget = (k, d) =>
         JSON.parse(localStorage.getItem(k) || JSON.stringify(d));
@@ -448,7 +638,8 @@
         recent = $("recent");
       const moneyToday = $("moneyToday"),
         lifeToday = $("lifeToday"),
-        stepsToday = $("stepsToday");
+        stepsToday = $("stepsToday"),
+        timeSaved = $("timeSaved");
       const limit = $("limit"),
         silent = $("silent"),
         price = $("price"),
@@ -463,18 +654,29 @@
       const undo = $("undo"),
         clearToday = $("clearToday"),
         clearAll = $("clearAll");
-      const achievementsBox = $("achievements");
+      const achievementsBox = $("achievements"),
+        insightsBox = $("insights");
+      const currencySel = $("currency"),
+        soundSel = $("soundSel"),
+        manualNight = $("manualNight");
+      const skipBtn = $("skip"),
+        urgeGrid = $("urgeGrid") || null,
+        urgeText = $("urgeText") || null,
+        reasonGrid = $("reasonGrid") || null;
 
       let minutes = 60,
         interval,
         paused = false,
-        left = 0;
-
+        left = 0,
+        urgeValue = null,
+        reasonValue = null;
       const CIRC = 2 * Math.PI * 80;
       ring.style.strokeDasharray = CIRC;
 
-      const daily = () => jget("daily", {});
-      const history = () => jget("history", []);
+      const daily = () => jget("daily", {}),
+        history = () => jget("history", []),
+        urgeLog = () => jget("urgeLog", []),
+        skipLog = () => jget("skips", []);
 
       function show(m) {
         toast.textContent = m;
@@ -482,72 +684,105 @@
         setTimeout(() => toast.classList.remove("show"), 2200);
       }
 
+      const reminder = $("reminder");
+      reminder.checked = localStorage.getItem("reminder") === "true";
+
+      reminder.onchange = () => {
+        localStorage.setItem("reminder", reminder.checked);
+        if (reminder.checked) Notification.requestPermission();
+      };
+
+      setInterval(() => {
+        if (!reminder.checked) return;
+        if (
+          !("Notification" in window) ||
+          Notification.permission !== "granted"
+        )
+          return;
+
+        const now = new Date();
+        if (now.getHours() === 10 && now.getMinutes() === 0) {
+          new Notification("Check your progress today 💪");
+        }
+      }, 60000);
+
+      function longestGap() {
+        const h = history();
+        if (h.length < 2) return "-";
+
+        let best = 0;
+        for (let i = 0; i < h.length - 1; i++) {
+          best = Math.max(best, h[i] - h[i + 1]);
+        }
+
+        const m = Math.floor(best / 60000);
+        const hhh = Math.floor(m / 60);
+        return hhh ? `${hhh}h ${m % 60}m` : `${m}m`;
+      }
+
+      function achievementToast(msg) {
+        show(`🎉 ${msg}`);
+        fireConfetti();
+      }
+
       function applyNightMode() {
+        if (manualNight.checked) {
+          document.body.classList.add("night");
+          return;
+        }
         const h = new Date().getHours();
         if (h >= 19 || h < 6) document.body.classList.add("night");
         else document.body.classList.remove("night");
       }
 
-      applyNightMode();
-
       function buildAchievements() {
         const s = streakDays();
         let html = "";
 
-        const list = [
+        const goals = [
           { d: 3, label: "⭐ 3-day streak" },
           { d: 7, label: "🥈 7-day streak" },
           { d: 14, label: "🥇 14-day streak" },
           { d: 30, label: "🔥 30-day streak" },
         ];
 
-        list.forEach((b) => {
-          html += `<div class="funCard" style="opacity:${s >= b.d ? 1 : 0.4}">${
-            b.label
-          }</div>`;
+        goals.forEach((g) => {
+          const pct = Math.min(100, (s / g.d) * 100);
+          const done = s >= g.d;
+
+          if (done && !localStorage.getItem("ach_" + g.d)) {
+            localStorage.setItem("ach_" + g.d, "true");
+            achievementToast(`${g.d}-day streak unlocked!`);
+          }
+
+          html += `
+      <div class="funCard" style="flex-direction: column; align-items: flex-start;">
+        <div style="display:flex; justify-content:space-between; width:100%; font-size:.85rem;">
+          <div>${g.label}</div>
+          <div style="opacity:.8">${Math.min(s, g.d)} / ${g.d}</div>
+        </div>
+
+        <div style="
+          width:100%;
+          height:8px;
+          border-radius:10px;
+          background:#1f1f1f;
+          margin-top:6px;
+          overflow:hidden;
+        ">
+          <div style="
+            width:${pct}%;
+            height:100%;
+            background:${done ? "#4ade80" : "#38bdf8"};
+            transition:.3s;
+          "></div>
+        </div>
+      </div>
+    `;
         });
 
         achievementsBox.innerHTML = html;
       }
-
-      undo.onclick = () => {
-        let h = history(),
-          d = daily();
-        if (!h.length) return show("Nothing to undo");
-        const last = h.shift();
-        jset("history", h);
-        const dayKey = new Date(last).toDateString();
-        if (d[dayKey] && d[dayKey] > 0) {
-          d[dayKey]--;
-          if (d[dayKey] === 0) delete d[dayKey];
-          jset("daily", d);
-        }
-        show("Last entry removed");
-        updateCounts();
-        draw();
-      };
-
-      clearToday.onclick = async () => {
-        const ok = await niceConfirm("🗑️ Clear only TODAY'S records?");
-        if (!ok) return;
-        const d = daily();
-        const key = new Date().toDateString();
-        delete d[key];
-        jset("daily", d);
-        show("Today cleared");
-        updateCounts();
-        draw();
-      };
-
-      clearAll.onclick = async () => {
-        const ok = await niceConfirm("🗑️ Delete ALL history permanently?");
-        if (!ok) return;
-        localStorage.removeItem("daily");
-        localStorage.removeItem("history");
-        show("All history deleted");
-        updateCounts();
-        draw();
-      };
 
       function logCig() {
         const d = daily(),
@@ -555,18 +790,35 @@
         d[k] = (d[k] || 0) + 1;
         jset("daily", d);
       }
+      function pushHistory() {
+        const h = history();
+        h.unshift(Date.now());
+        jset("history", h);
+      }
 
       function streakDays() {
-        const d = daily(),
-          lim = parseInt(limit.value || 8),
-          now = Date.now();
+        const d = daily();
+        const lim = parseInt(limit.value || 8);
+        const now = Date.now();
         let s = 0;
+        let seenAny = false;
+
+        // look back up to 60 days
         for (let i = 0; i < 60; i++) {
           const k = new Date(now - i * 864e5).toDateString();
-          if ((d[k] || 0) <= lim) s++;
-          else break;
+
+          // if there is NO record for the day → streak breaks
+          if (!(k in d)) break;
+
+          seenAny = true;
+
+          // if day exists but is OVER limit → streak breaks
+          if (d[k] > lim) break;
+
+          s++;
         }
-        return s;
+
+        return seenAny ? s : 0;
       }
 
       function updateMoneyAndHealth() {
@@ -575,9 +827,17 @@
           n = d[k] || 0;
         const perCig =
           parseFloat(price.value || 200) / parseFloat(perpack.value || 20);
-        moneyToday.textContent = "₹" + (n * perCig).toFixed(0);
+        const cur = currencySel.value || "₹";
+        moneyToday.textContent = cur + (n * perCig).toFixed(0);
         lifeToday.textContent = `~${n * 11} min`;
         stepsToday.textContent = `~${(n * 700).toLocaleString()} steps`;
+        const skips = skipLog().filter(
+          (x) => new Date(x).toDateString() === k
+        ).length;
+
+        timeSaved.textContent = `${skips * minutes} min saved`;
+        $("skipsCount").textContent = `${skips} skipped`;
+
         const lim = parseInt(limit.value || 8),
           pct = Math.min(100, (n / lim) * 100);
         limitBar.style.width = pct + "%";
@@ -601,10 +861,13 @@
           k = new Date().toDateString(),
           n = d[k] || 0;
         today.textContent = n + " cig";
+        $("bestGap").textContent = longestGap();
+
         sinceText();
         streak.textContent = streakDays() + " days";
         updateMoneyAndHealth();
         buildAchievements();
+        buildInsights();
       }
 
       function sinceText() {
@@ -613,19 +876,20 @@
           since.textContent = "";
           return;
         }
-        const diff = Date.now() - t,
-          m = Math.floor(diff / 60000),
-          s = Math.floor((diff % 60000) / 1000);
-        since.textContent = `Last: ${m}m ${s}s ago`;
+        const diff = Date.now() - t;
+        const w = Math.floor(diff / 6048e5),
+          dd = Math.floor((diff % 6048e5) / 864e5);
+        const h = Math.floor((diff % 864e5) / 36e5),
+          m = Math.floor((diff % 36e5) / 6e4),
+          s = Math.floor((diff % 6e4) / 1e3);
+        let txt = "Last: ";
+        if (w) txt += `${w}w `;
+        if (dd) txt += `${dd}d `;
+        if (h) txt += `${h}h `;
+        txt += `${m}m ${s}s ago`;
+        since.textContent = txt;
       }
-
       setInterval(sinceText, 1000);
-
-      function pushHistory() {
-        const h = history();
-        h.unshift(Date.now());
-        jset("history", h);
-      }
 
       function draw() {
         const ctx = chart.getContext("2d");
@@ -673,22 +937,99 @@
         });
       }
 
-      addPreset.onchange = () => {
-        const v = parseInt(addPreset.value || 0);
-        if (!v) return;
-        const p = jget("presets", [60, 45, 90]);
-        p.push(v);
-        jset("presets", p);
-        addPreset.value = "";
-        renderPresets();
-      };
+      function buildInsights() {
+        const u = urgeLog();
+        const todayKey = new Date().toDateString();
+
+        // today's urges only
+        const todayUrges = u.filter(
+          (x) => new Date(x.t).toDateString() === todayKey
+        );
+
+        const d = daily();
+        const todayCount = d[todayKey] || 0;
+        const lim = parseInt(limit.value || 8);
+
+        let avgText = "-";
+
+        if (todayUrges.length) {
+          const avg =
+            todayUrges.reduce((a, b) => a + b.v, 0) / todayUrges.length;
+
+          // pressure adjusted to daily limit
+          const pressure = Math.min(5, avg * (todayCount / lim) || 0);
+
+          avgText = pressure.toFixed(1) + "/5";
+        }
+
+        // risky hour (same logic)
+        const hours = {};
+        history().forEach((t) => {
+          const h = new Date(t).getHours();
+          hours[h] = (hours[h] || 0) + 1;
+        });
+
+        const best = Object.entries(hours).sort((a, b) => b[1] - a[1])[0] || [
+          null,
+          0,
+        ];
+        const riskyText = best[0] !== null ? best[0] + ":00" : "-";
+
+        insightsBox.innerHTML = `
+    <div class="funCard">📈 Urge pressure (adjusted): <span>${avgText}</span></div>
+    <div class="funCard">⏰ Most risky hour: <span>${riskyText}</span></div>
+  `;
+        const reasons = {};
+        urgeLog().forEach((u) => {
+          if (u.reason) reasons[u.reason] = (reasons[u.reason] || 0) + 1;
+        });
+
+        const sorted = Object.entries(reasons)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3);
+
+        const icons = {
+          Coffee: "☕",
+          Stress: "😤",
+          Bored: "😴",
+          Social: "🍻",
+          "After food": "🍽️",
+          Driving: "🚗",
+        };
+
+        let reasonHtml = sorted.length
+          ? sorted
+              .map(
+                (r) =>
+                  `<div class="funCard">${icons[r[0]] || "🔎"} ${
+                    r[0]
+                  } — <span>${r[1]} urges</span></div>`
+              )
+              .join("")
+          : `<div class="funCard">🔎 <span>Log urges to see patterns</span></div>`;
+
+        insightsBox.innerHTML += reasonHtml;
+
+        let msg = "";
+
+        if (streakDays() >= 5)
+          msg =
+            "You’re doing great — consider lowering your limit by 1 next week.";
+        else msg = "Focus on staying under your limit consistently first.";
+
+        insightsBox.innerHTML += `
+<div class="funCard">🎯 <span>${msg}</span></div>
+`;
+      }
 
       function notify() {
         if (!silent.checked) {
           if ("vibrate" in navigator) navigator.vibrate(300);
-          try {
-            ding.play();
-          } catch {}
+          if (soundSel.value !== "off") {
+            try {
+              ding.play();
+            } catch {}
+          }
         }
         if ("Notification" in window && Notification.permission === "granted")
           new Notification("Cooldown done", { body: "You can smoke now" });
@@ -710,30 +1051,26 @@
           notify();
           return;
         }
-
         left = rem;
-
-        const m = Math.floor(rem / 60000),
-          s = Math.floor((rem % 60000) / 1000);
-
-        time.textContent =
-          (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
-
+        const m = Math.floor(rem / 6e4),
+          s = Math.floor((rem % 6e4) / 1e3);
+        time.textContent = `${m.toString().padStart(2, "0")}:${s
+          .toString()
+          .padStart(2, "0")}`;
         ring.style.strokeDashoffset = CIRC * (1 - rem / total);
         status.textContent = paused ? "Paused" : "Cooling…";
       }
 
       start.onclick = async () => {
         const ok = await niceConfirm("Log a cigarette and start cooldown?");
-        if (!ok) return;
+        if (!ok) return false;
 
         const lim = parseInt(limit.value || 8),
           d = daily(),
           k = new Date().toDateString();
-
         if ((d[k] || 0) >= lim) show("Limit reached today");
 
-        const dur = minutes * 60000,
+        const dur = minutes * 6e4,
           end = Date.now() + dur;
 
         localStorage.setItem("until", end);
@@ -742,15 +1079,20 @@
 
         logCig();
         pushHistory();
+
+        if (urgeValue) saveUrge(false);
+
         updateCounts();
         draw();
 
         start.style.display = "none";
         pause.style.display = "block";
-
         paused = false;
+
         interval = setInterval(() => tick(end, dur), 1000);
         tick(end, dur);
+
+        return true;
       };
 
       pause.onclick = () => {
@@ -763,14 +1105,11 @@
         } else {
           paused = false;
           pause.textContent = "Pause";
-
           const left = parseInt(localStorage.getItem("remain") || 0),
-            total = parseInt(localStorage.getItem("total")) || minutes * 60000,
+            total = parseInt(localStorage.getItem("total")) || minutes * 6e4,
             end = Date.now() + left;
-
           localStorage.removeItem("remain");
           localStorage.setItem("until", end);
-
           interval = setInterval(() => tick(end, total), 1000);
           tick(end, total);
         }
@@ -786,6 +1125,125 @@
         start.style.display = "block";
         pause.style.display = "none";
         status.textContent = "";
+      };
+
+      function fireConfetti() {
+        const dpr = window.devicePixelRatio || 1;
+
+        const canvas = document.createElement("canvas");
+        canvas.style.position = "fixed";
+        canvas.style.inset = "0";
+        canvas.style.pointerEvents = "none";
+        canvas.style.zIndex = "9999";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const originX = window.innerWidth / 2;
+        const originY = window.innerHeight - 6;
+
+        const gravity = 0.12;
+        const drag = 0.992;
+
+        const pieces = Array.from({ length: 70 }, () => {
+          const spread = ((Math.random() - 0.5) * Math.PI) / 1.5;
+          const power = 3.2 + Math.random() * 2.5;
+
+          return {
+            x: originX,
+            y: originY,
+            vx: Math.sin(spread) * power,
+            vy: -Math.cos(spread) * power * 1.25,
+            size: 5 + Math.random() * 4,
+            color: `hsl(${Math.random() * 360}, 85%, 60%)`,
+            life: 1,
+          };
+        });
+
+        function draw() {
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+          pieces.forEach((p) => {
+            p.vy += gravity;
+            p.vx *= drag;
+            p.vy *= drag;
+
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life -= 0.01;
+
+            ctx.globalAlpha = Math.max(p.life, 0);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          });
+
+          requestAnimationFrame(draw);
+        }
+
+        draw();
+
+        setTimeout(() => canvas.remove(), 2600);
+      }
+
+      skipBtn.onclick = async () => {
+        const ok = await niceConfirm(
+          "Skip this cigarette and log it as resisted?"
+        );
+        if (!ok) return;
+        const s = skipLog();
+        s.push(Date.now());
+        jset("skips", s);
+        if (urgeValue) saveUrge(true);
+        show("Logged as skipped — proud of you 👊");
+        fireConfetti();
+
+        updateCounts();
+      };
+
+      function saveUrge(skipped) {
+        const arr = urgeLog();
+        arr.push({
+          t: Date.now(),
+          v: urgeValue,
+          skipped,
+          reason: reasonValue || null,
+        });
+        jset("urgeLog", arr);
+        urgeValue = null;
+        reasonValue = null;
+        urgeGrid
+          .querySelectorAll(".urge-btn")
+          .forEach((b) => b.classList.remove("active"));
+        reasonGrid
+          .querySelectorAll(".reason")
+          .forEach((b) => b.classList.remove("active"));
+        urgeText.textContent = "Saved!";
+        setTimeout(() => (urgeText.textContent = "Tap how it feels"), 1500);
+      }
+
+      addPreset.onchange = () => {
+        const v = parseInt(addPreset.value || 0);
+        if (!v || v <= 0) return;
+
+        const arr = jget("presets", [60, 45, 90]);
+
+        // avoid duplicates
+        if (!arr.includes(v)) arr.push(v);
+
+        jset("presets", arr);
+        addPreset.value = "";
+        renderPresets();
+        show("Preset added");
       };
 
       silent.checked = localStorage.getItem("silent") === "true";
@@ -809,11 +1267,28 @@
         updateMoneyAndHealth();
       };
 
+      currencySel.value = localStorage.getItem("currency") || "₹";
+      currencySel.onchange = () => {
+        localStorage.setItem("currency", currencySel.value);
+        updateMoneyAndHealth();
+      };
+
+      soundSel.value = localStorage.getItem("sound") || "ding";
+      soundSel.onchange = () => localStorage.setItem("sound", soundSel.value);
+
+      manualNight.checked = localStorage.getItem("manualNight") === "true";
+      manualNight.onchange = () => {
+        localStorage.setItem("manualNight", manualNight.checked);
+        applyNightMode();
+      };
+
       exportBtn.onclick = () => {
         const data = {
           daily: daily(),
           history: history(),
           presets: jget("presets", [60, 45, 90]),
+          urgeLog: urgeLog(),
+          skips: skipLog(),
         };
         const blob = new Blob([JSON.stringify(data, null, 2)], {
           type: "application/json",
@@ -839,34 +1314,226 @@
         });
       };
 
+      undo.onclick = () => {
+        let h = history(),
+          d = daily();
+        if (!h.length) return show("Nothing to undo");
+        const last = h.shift();
+        jset("history", h);
+        const dayKey = new Date(last).toDateString();
+        if (d[dayKey] && d[dayKey] > 0) {
+          d[dayKey]--;
+          if (d[dayKey] === 0) delete d[dayKey];
+          jset("daily", d);
+        }
+        show("Last entry removed");
+        updateCounts();
+        draw();
+      };
+
+      clearToday.onclick = async () => {
+        const ok = await niceConfirm("🗑️ Clear only TODAY'S records?");
+        if (!ok) return;
+        const d = daily();
+        const key = new Date().toDateString();
+        delete d[key];
+        jset("daily", d);
+        show("Today cleared");
+        updateCounts();
+        draw();
+      };
+
+      clearAll.onclick = async () => {
+        const ok = await niceConfirm(
+          "🗑️ Delete ALL data — cigarettes, urges, skips, streaks, everything?"
+        );
+        if (!ok) return;
+
+        // core data
+        localStorage.removeItem("daily");
+        localStorage.removeItem("history");
+        localStorage.removeItem("urgeLog");
+        localStorage.removeItem("skips");
+
+        // achievements flags
+        [3, 7, 14, 30].forEach((d) => localStorage.removeItem("ach_" + d));
+
+        // last-timer timestamps
+        localStorage.removeItem("last");
+        localStorage.removeItem("until");
+        localStorage.removeItem("total");
+        localStorage.removeItem("remain");
+
+        show("All data cleared");
+        updateCounts();
+        draw();
+      };
+
+      if (urgeGrid) {
+        urgeGrid.querySelectorAll(".urge-btn").forEach((btn) => {
+          btn.onclick = () => {
+            urgeGrid
+              .querySelectorAll(".urge-btn")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            urgeValue = parseInt(btn.dataset.v);
+            urgeText.textContent = `Selected: ${urgeValue}/5`;
+          };
+        });
+      }
+      if (reasonGrid) {
+        reasonGrid.querySelectorAll(".reason").forEach((btn) => {
+          btn.onclick = () => {
+            reasonGrid
+              .querySelectorAll(".reason")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            reasonValue = btn.dataset.r;
+          };
+        });
+      }
+
       (function init() {
         renderPresets();
         updateCounts();
-
         if (localStorage.getItem("until")) {
           start.style.display = "none";
           pause.style.display = "block";
-
           const until = parseInt(localStorage.getItem("until"));
           const total =
-            parseInt(localStorage.getItem("total")) || minutes * 60000;
-
-          requestAnimationFrame(() => tick(until, total)); /* smooth restore */
-
+            parseInt(localStorage.getItem("total")) || minutes * 6e4;
+          requestAnimationFrame(() => tick(until, total));
           interval = setInterval(() => tick(until, total), 1000);
         }
-
         if ("serviceWorker" in navigator)
           navigator.serviceWorker.register("sw.js");
-
         if ("Notification" in window && Notification.permission === "default")
           Notification.requestPermission();
-
+        applyNightMode();
         draw();
       })();
     </script>
 
-    <!-- NICE CONFIRM SHEET -->
+    <!-- URGE POPUP -->
+    <div
+      id="urgePopup"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      "
+    >
+      <div
+        style="
+          background: #151515;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 18px;
+          padding: 14px;
+          width: 92%;
+          max-width: 380px;
+        "
+      >
+        <div style="font-size: 0.95rem; margin-bottom: 6px">
+          How strong was the urge?
+        </div>
+
+        <div class="urge-grid" id="pUrges">
+          <div class="urge-btn" data-v="1"><span>🙂</span>Mild</div>
+          <div class="urge-btn" data-v="2"><span>😐</span>Okay</div>
+          <div class="urge-btn" data-v="3"><span>😣</span>Strong</div>
+          <div class="urge-btn" data-v="4"><span>🥵</span>Hard</div>
+          <div class="urge-btn" data-v="5"><span>🔥</span>Very hard</div>
+        </div>
+
+        <div class="sub" style="margin-top: 6px">What caused it?</div>
+
+        <div class="reason-grid" id="pReasons">
+          <div class="reason" data-r="Coffee">☕ Coffee</div>
+          <div class="reason" data-r="Stress">😤 Stress</div>
+          <div class="reason" data-r="Bored">😴 Bored</div>
+          <div class="reason" data-r="Social">🍻 Social</div>
+          <div class="reason" data-r="After food">🍽️ After food</div>
+          <div class="reason" data-r="Driving">🚗 Driving</div>
+        </div>
+
+        <button id="pSave" class="btn primary" style="margin-top: 10px">
+          Save
+        </button>
+        <button id="pSkip" class="btn" style="margin-top: 6px">Skip</button>
+      </div>
+    </div>
+    <!-- END URGE POPUP -->
+    <script>
+      const urgePopup = document.getElementById("urgePopup");
+      const pUrges = document.getElementById("pUrges");
+      const pReasons = document.getElementById("pReasons");
+      const pSave = document.getElementById("pSave");
+      const pSkip = document.getElementById("pSkip");
+
+      let pVal = null,
+        pReason = null;
+
+      pUrges.querySelectorAll(".urge-btn").forEach((b) => {
+        b.onclick = () => {
+          pUrges
+            .querySelectorAll(".urge-btn")
+            .forEach((x) => x.classList.remove("active"));
+          b.classList.add("active");
+          pVal = parseInt(b.dataset.v);
+        };
+      });
+
+      pReasons.querySelectorAll(".reason").forEach((b) => {
+        b.onclick = () => {
+          pReasons
+            .querySelectorAll(".reason")
+            .forEach((x) => x.classList.remove("active"));
+          b.classList.add("active");
+          pReason = b.dataset.r;
+        };
+      });
+
+      function askUrgePopup() {
+        urgePopup.style.display = "flex";
+        pVal = null;
+        pReason = null;
+
+        return new Promise((resolve) => {
+          pSave.onclick = () => {
+            urgePopup.style.display = "none";
+
+            if (pVal) {
+              const arr = JSON.parse(localStorage.getItem("urgeLog") || "[]");
+              arr.push({
+                t: Date.now(),
+                v: pVal,
+                skipped: false,
+                reason: pReason || null,
+              });
+              localStorage.setItem("urgeLog", JSON.stringify(arr));
+            }
+
+            resolve();
+          };
+
+          pSkip.onclick = () => {
+            urgePopup.style.display = "none";
+            resolve();
+          };
+        });
+      }
+
+      const _origStart = start.onclick;
+      start.onclick = async (...args) => {
+        const didLog = await _origStart.apply(start, args);
+        if (didLog) await askUrgePopup();
+      };
+    </script>
+
     <div id="confirmWrap" style="display: none">
       <div
         style="
@@ -893,7 +1560,6 @@
             id="confirmMsg"
             style="margin-bottom: 14px; font-size: 0.95rem; opacity: 0.9"
           ></div>
-
           <button
             id="confirmYes"
             style="
@@ -909,7 +1575,6 @@
           >
             Yes
           </button>
-
           <button
             id="confirmNo"
             style="
@@ -933,7 +1598,6 @@
         confirmMsg = $("confirmMsg"),
         confirmYes = $("confirmYes"),
         confirmNo = $("confirmNo");
-
       function niceConfirm(message) {
         return new Promise((resolve) => {
           confirmMsg.textContent = message;
@@ -948,6 +1612,7 @@
         });
       }
     </script>
+
     <div
       style="
         text-align: center;
@@ -960,9 +1625,8 @@
       <a
         href="https://shreesha99.github.io/personal-website/"
         style="color: #4ade80"
+        >visit site</a
       >
-        visit site
-      </a>
     </div>
   </body>
 </html>
