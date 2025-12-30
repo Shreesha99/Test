@@ -6,7 +6,6 @@
     <title>Smoke Timer</title>
 
     <link rel="manifest" href="manifest.json" />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
@@ -81,6 +80,7 @@
           id="skip"
           class="btn"
           style="margin-top: 6px; background: #1f2937; color: #fff"
+          title="Log this cigarette as resisted. Example: If you felt like smoking but waited it out, this counts as a win and improves your streak — nothing gets added to your daily total."
         >
           👍 Skip this cigarette
         </button>
@@ -195,7 +195,16 @@
         </div>
 
         <div class="sub" style="margin-top: 6px">
-          Not medical advice — just fun estimates.
+          Not medical advice — just fun estimates. Skipping one is a win 🎯
+        </div>
+
+        <div class="sub" style="margin-top: 6px; color: #fbbf24">
+          <b>Disclaimer:</b> This app is a harm-reduction tool meant to help you
+          cut down and eventually quit. It does <b>not</b> encourage smoking
+          during the cooldown — the goal is to increase the gap, build control,
+          and smoke less. This is not medical advice, and you use it at your own
+          risk. I am not responsible for any decisions, outcomes, or health
+          issues that may occur.
         </div>
       </div>
     </div>
@@ -206,6 +215,68 @@
       <source src="data:audio/mp3;base64,//uQxA..." type="audio/mp3" />
     </audio>
 
+    <!-- urge popup -->
+    <div id="urgePopup" class="urge-overlay">
+      <div class="urge-card">
+        <div style="font-size: 0.95rem; margin-bottom: 6px">
+          How strong was the urge?
+        </div>
+
+        <div class="urge-grid" id="pUrges">
+          <div class="urge-btn" data-v="1"><span>🙂</span>Mild</div>
+          <div class="urge-btn" data-v="2"><span>😐</span>Okay</div>
+          <div class="urge-btn" data-v="3"><span>😣</span>Strong</div>
+          <div class="urge-btn" data-v="4"><span>🥵</span>Hard</div>
+          <div class="urge-btn" data-v="5"><span>🔥</span>Very hard</div>
+        </div>
+
+        <div class="sub" style="margin-top: 6px">What caused it?</div>
+
+        <div class="reason-grid" id="pReasons">
+          <div class="reason" data-r="Coffee">☕ Coffee</div>
+          <div class="reason" data-r="Stress">😤 Stress</div>
+          <div class="reason" data-r="Bored">😴 Bored</div>
+          <div class="reason" data-r="Social">🍻 Social</div>
+          <div class="reason" data-r="After food">🍽️ After food</div>
+          <div class="reason" data-r="Driving">🚗 Driving</div>
+        </div>
+
+        <button id="pSave" class="btn primary" style="margin-top: 10px">
+          Save
+        </button>
+        <button id="pSkip" class="btn" style="margin-top: 6px">Skip</button>
+      </div>
+    </div>
+
+    <!-- confirm popup -->
+    <div id="confirmWrap" class="confirm-overlay">
+      <div class="confirm-card">
+        <div
+          id="confirmMsg"
+          style="margin-bottom: 14px; font-size: 0.95rem; opacity: 0.9"
+        ></div>
+        <button id="confirmYes" class="confirm-yes">Yes</button>
+        <button id="confirmNo" class="confirm-no">Cancel</button>
+      </div>
+    </div>
+
+    <div
+      style="
+        text-align: center;
+        opacity: 0.6;
+        padding: 12px 0;
+        font-size: 0.8rem;
+      "
+    >
+      developed by a fellow sufferer —
+      <a
+        href="https://shreesha99.github.io/personal-website/"
+        style="color: #4ade80"
+        >visit site</a
+      >
+    </div>
+
     <script src="app.js"></script>
+    <script src="drive.js"></script>
   </body>
 </html>
