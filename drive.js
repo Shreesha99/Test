@@ -31,6 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function showLoader() {
+    $("loader").style.display = "grid";
+  }
+
+  function hideLoader() {
+    $("loader").style.display = "none";
+  }
+
   // ——— BUTTONS ———
   const driveLogin = $("driveLogin");
   const driveBackup = $("driveBackup");
@@ -38,88 +46,126 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ——— SIGN IN ———
   driveLogin.onclick = async () => {
-    await loadGapi();
+    try {
+      showLoader();
+      await loadGapi();
 
-    const tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPE,
-      callback: (t) => (googleUser = t),
-    });
+      const tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPE,
+        callback: (t) => {
+          googleUser = t;
+          hideLoader();
+          show("Signed in successfully");
+        },
+      });
 
-    tokenClient.requestAccessToken();
+      tokenClient.requestAccessToken();
+    } catch (e) {
+      hideLoader();
+      console.error(e);
+      show("Login failed — please try again");
+    }
   };
 
   // ——— BACKUP ———
   driveBackup.onclick = async () => {
     if (!googleUser) return show("Sign in first");
 
-    await loadGapi();
+    driveBackup.disabled = true;
+    showLoader();
 
-    const data = {
-      daily: daily(),
-      history: history(),
-      presets: jget("presets", [60, 45, 90]),
-      urgeLog: urgeLog(),
-      skips: skipLog(),
-    };
+    try {
+      await loadGapi();
 
-    const file = new Blob([JSON.stringify(data)], {
-      type: "application/json",
-    });
+      const data = {
+        daily: daily(),
+        history: history(),
+        presets: jget("presets", [60, 45, 90]),
+        urgeLog: urgeLog(),
+        skips: skipLog(),
+      };
 
-    const form = new FormData();
-    form.append(
-      "metadata",
-      new Blob(
-        [
-          JSON.stringify({
-            name: "smoketimer-backup.json",
-            mimeType: "application/json",
-          }),
-        ],
-        { type: "application/json" }
-      )
-    );
-    form.append("file", file);
+      const file = new Blob([JSON.stringify(data)], {
+        type: "application/json",
+      });
 
-    await fetch(
-      "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${googleUser.access_token}` },
-        body: form,
-      }
-    );
+      const form = new FormData();
+      form.append(
+        "metadata",
+        new Blob(
+          [
+            JSON.stringify({
+              name: "smoketimer-backup.json",
+              mimeType: "application/json",
+            }),
+          ],
+          { type: "application/json" }
+        )
+      );
+      form.append("file", file);
 
-    show("Backed up to Drive");
+      const res = await fetch(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${googleUser.access_token}` },
+          body: form,
+        }
+      );
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      show("Backed up to Drive");
+    } catch (e) {
+      console.error(e);
+      show("Backup failed — please try again");
+    } finally {
+      hideLoader();
+      driveBackup.disabled = false;
+    }
   };
 
   // ——— RESTORE ———
   driveRestore.onclick = async () => {
     if (!googleUser) return show("Sign in first");
 
-    await loadGapi();
+    driveRestore.disabled = true;
+    showLoader();
 
-    const res = await gapi.client.drive.files.list({
-      q: "name='smoketimer-backup.json'",
-      fields: "files(id,name)",
-      spaces: "drive",
-    });
+    try {
+      await loadGapi();
 
-    if (!res.result.files?.length) return show("No backup found");
+      const res = await gapi.client.drive.files.list({
+        q: "name='smoketimer-backup.json'",
+        fields: "files(id,name)",
+        spaces: "drive",
+      });
 
-    const fileId = res.result.files[0].id;
+      if (!res.result.files?.length) {
+        show("No backup found");
+        return;
+      }
 
-    const download = await gapi.client.drive.files.get({
-      fileId,
-      alt: "media",
-    });
+      const fileId = res.result.files[0].id;
 
-    const data = JSON.parse(download.body);
+      const download = await gapi.client.drive.files.get({
+        fileId,
+        alt: "media",
+      });
 
-    Object.entries(data).forEach(([k, v]) => jset(k, v));
+      const data = JSON.parse(download.body);
 
-    show("Restored from Drive");
-    location.reload();
+      Object.entries(data).forEach(([k, v]) => jset(k, v));
+
+      show("Restored from Drive");
+      location.reload();
+    } catch (e) {
+      console.error(e);
+      show("Restore failed — try again");
+    } finally {
+      hideLoader();
+      driveRestore.disabled = false;
+    }
   };
 });
