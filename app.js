@@ -63,7 +63,33 @@ function show(m) {
   }, 2200);
 }
 
-// reminder
+function sinceText() {
+  const t = parseInt(localStorage.getItem("last") || 0);
+  const targetTop = document.getElementById("sinceTop");
+
+  if (!t) {
+    since.textContent = "";
+    if (targetTop) targetTop.textContent = "";
+    return;
+  }
+
+  const diff = Date.now() - t;
+  const w = Math.floor(diff / 6048e5),
+    dd = Math.floor((diff % 6048e5) / 864e5);
+  const h = Math.floor((diff % 864e5) / 36e5),
+    m = Math.floor((diff % 36e5) / 6e4),
+    s = Math.floor((diff % 6e4) / 1e3);
+
+  let txt = "Last: ";
+  if (w) txt += `${w}w `;
+  if (dd) txt += `${dd}d `;
+  if (h) txt += `${h}h `;
+  txt += `${m}m ${s}s ago`;
+
+  since.textContent = txt;
+  if (targetTop) targetTop.textContent = txt;
+}
+
 const reminder = $("reminder");
 reminder.checked = localStorage.getItem("reminder") === "true";
 
@@ -294,6 +320,129 @@ function draw() {
       .map((t) => new Date(t).toLocaleTimeString())
       .join(" · ");
 }
+
+/* ---- PROGRESS TAB UPGRADES (NO EXISTING CODE CHANGED) ---- */
+
+function enhanceProgress() {
+  const box = document.querySelector("#tab-progress .metricBox");
+  if (!box) return;
+
+  // remove previous injected section (so it refreshes cleanly)
+  const old = box.querySelector(".progress-extra");
+  if (old) old.remove();
+
+  const d = daily();
+  const now = Date.now();
+  const days = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const k = new Date(now - i * 864e5).toDateString();
+    days.push({ label: k.slice(0, 3), value: d[k] || 0 });
+  }
+
+  const total = days.reduce((a, b) => a + b.value, 0);
+  const avg = (total / 7).toFixed(1);
+
+  const best = [...days].sort((a, b) => a.value - b.value)[0];
+
+  const wrap = document.createElement("div");
+  wrap.className = "progress-extra";
+
+  wrap.innerHTML = `
+    <div class="funCard">📊 Weekly average — <span>${avg} cig/day</span></div>
+    <div class="funCard">🏅 Best day — <span>${best.label}: ${
+    best.value
+  } cig</span></div>
+
+    <div class="funCard" style="flex-direction:column;align-items:flex-start">
+      <div style="opacity:.8;margin-bottom:4px;font-size:.78rem">Last 7 days</div>
+      ${days
+        .map(
+          (d) =>
+            `<div style="display:flex;justify-content:space-between;width:100%;font-size:.8rem">
+              <span>${d.label}</span>
+              <span>${d.value}</span>
+            </div>`
+        )
+        .join("")}
+    </div>
+  `;
+
+  box.appendChild(wrap);
+}
+
+// monkey-patch draw() to refresh our new section too
+const _origDraw = draw;
+draw = function () {
+  _origDraw();
+  enhanceProgress();
+};
+
+/* ---- PROGRESS TAB: MORE STATS ---- */
+
+function enhanceProgressMore() {
+  const box = document.querySelector("#tab-progress .metricBox");
+  if (!box) return;
+
+  // clear if re-rendering
+  const old = box.querySelector(".progress-extra-2");
+  if (old) old.remove();
+
+  const d = daily();
+  const now = Date.now();
+
+  const last7 = [];
+  const prev7 = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const k = new Date(now - i * 864e5).toDateString();
+    last7.push(d[k] || 0);
+  }
+
+  for (let i = 13; i >= 7; i--) {
+    const k = new Date(now - i * 864e5).toDateString();
+    prev7.push(d[k] || 0);
+  }
+
+  const totalThis = last7.reduce((a, b) => a + b, 0);
+  const totalPrev = prev7.reduce((a, b) => a + b, 0);
+
+  let changeText = "-";
+  let changeEmoji = "➖";
+
+  if (totalPrev > 0) {
+    const diff = totalThis - totalPrev;
+    const pct = Math.abs((diff / totalPrev) * 100).toFixed(1);
+    if (diff < 0) {
+      changeText = `↓ ${pct}% better`;
+      changeEmoji = "💚";
+    } else if (diff > 0) {
+      changeText = `↑ ${pct}% worse`;
+      changeEmoji = "⚠️";
+    }
+  }
+
+  // streak summary (uses your existing streakDays())
+  const streak = streakDays();
+
+  const wrap = document.createElement("div");
+  wrap.className = "progress-extra-2";
+
+  wrap.innerHTML = `
+    <div class="funCard">📦 Weekly total — <span>${totalThis} cigarettes</span></div>
+    <div class="funCard">${changeEmoji} Compared to last week — <span>${changeText}</span></div>
+    <div class="funCard">🔥 Current streak — <span>${streak} days</span></div>
+  `;
+
+  box.appendChild(wrap);
+}
+
+// patch current draw hook again to include these too
+const _draw2 = draw;
+draw = function () {
+  _draw2();
+  enhanceProgressMore();
+};
 
 // presets
 function renderPresets() {
