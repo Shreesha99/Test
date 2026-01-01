@@ -536,6 +536,103 @@ function buildInsights() {
   insightsBox.innerHTML += `<div class="funCard">🎯 <span>${msg}</span></div>`;
 }
 
+/* ---- INSIGHTS: EXTRA ANALYTICS ---- */
+
+function enhanceInsights() {
+  const box = document.getElementById("insights");
+  if (!box) return;
+
+  // avoid duplicates on refresh
+  const old = box.querySelector(".insights-extra");
+  if (old) old.remove();
+
+  const wrap = document.createElement("div");
+  wrap.className = "insights-extra";
+
+  const d = daily();
+  const h = history();
+  const skips = skipLog();
+
+  // --- 1) Weekend vs Weekday ---
+  let weekend = 0,
+    weekday = 0;
+  Object.entries(d).forEach(([k, v]) => {
+    const day = new Date(k).getDay();
+    if (day === 0 || day === 6) weekend += v;
+    else weekday += v;
+  });
+
+  const wwMsg =
+    weekend < weekday
+      ? "You smoke less on weekends 🎉"
+      : weekend > weekday
+      ? "Weekends seem riskier — plan distractions 📅"
+      : "Pretty balanced across the week";
+
+  // --- 2) Skip success rate ---
+  const totalLogs = h.length;
+  const skipRate = totalLogs
+    ? Math.min(100, ((skips.length / totalLogs) * 100).toFixed(1))
+    : "-";
+
+  // --- 3) Most improved day ---
+  const now = Date.now();
+  let changeMsg = "-";
+
+  const thisWeek = [];
+  const lastWeek = [];
+
+  for (let i = 6; i >= 0; i--) {
+    thisWeek.push(d[new Date(now - i * 864e5).toDateString()] || 0);
+  }
+  for (let i = 13; i >= 7; i--) {
+    lastWeek.push(d[new Date(now - i * 864e5).toDateString()] || 0);
+  }
+
+  if (thisWeek.length === 7 && lastWeek.length === 7) {
+    let bestDay = null;
+    let bestDiff = 0;
+
+    thisWeek.forEach((v, i) => {
+      const diff = (lastWeek[i] || 0) - v;
+      if (diff > bestDiff) {
+        bestDiff = diff;
+        bestDay = i;
+      }
+    });
+
+    if (bestDay !== null) {
+      const label = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][bestDay];
+      changeMsg = `${label} improved most — ${bestDiff} fewer cig`;
+    }
+  }
+
+  // --- 4) Suggestion tip ---
+  let tip = "Log urges — they reveal powerful patterns.";
+  if (skipRate !== "-" && skipRate >= 20)
+    tip = "Great skipping habit — try pushing your cooldown +5 min.";
+  else if (streakDays() >= 7)
+    tip = "Strong streak — consider lowering your limit slightly.";
+  else if (weekend > weekday)
+    tip = "Weekends are tricky — plan non-smoke activities ahead.";
+
+  wrap.innerHTML = `
+    <div class="funCard">📅 Weekends vs weekdays — <span>${wwMsg}</span></div>
+    <div class="funCard">🙅 Skip success rate — <span>${skipRate}%</span></div>
+    <div class="funCard">📉 Biggest improvement — <span>${changeMsg}</span></div>
+    <div class="funCard">💡 Tip — <span>${tip}</span></div>
+  `;
+
+  box.appendChild(wrap);
+}
+
+// patch insights renderer so extras load automatically
+const _oldInsights = buildInsights;
+buildInsights = function () {
+  _oldInsights();
+  enhanceInsights();
+};
+
 // notifications
 function notify() {
   if (!silent.checked) {
@@ -576,7 +673,9 @@ function tick(end, total) {
     .toString()
     .padStart(2, "0")}`;
   ring.style.strokeDashoffset = CIRC * (1 - rem / total);
-  status.textContent = paused ? "Paused" : "Cooling…";
+  status.textContent = paused ? "Paused" : coolingMessage(rem);
+
+  enhanceTimer();
 }
 
 // START button
@@ -746,10 +845,31 @@ addPreset.onchange = () => {
 silent.checked = localStorage.getItem("silent") === "true";
 silent.onchange = () => localStorage.setItem("silent", silent.checked);
 
-limit.value = localStorage.getItem("limit") || 8;
-limit.onchange = () => {
-  localStorage.setItem("limit", limit.value);
+// ----- DAILY LIMIT (STEPPER + PERSIST) -----
+
+const limitMinus = $("limitMinus");
+const limitPlus = $("limitPlus");
+const limitDisplay = $("limitDisplay");
+
+// always load from storage (fallback = 8)
+limit.value = parseInt(localStorage.getItem("limit") || "8");
+limitDisplay.textContent = limit.value;
+
+function saveLimit(v) {
+  limit.value = v;
+  limitDisplay.textContent = v;
+  localStorage.setItem("limit", v);
   updateCounts();
+}
+
+limitMinus.onclick = () => {
+  let v = parseInt(limit.value);
+  if (v > 1) saveLimit(v - 1);
+};
+
+limitPlus.onclick = () => {
+  let v = parseInt(limit.value);
+  if (v < 40) saveLimit(v + 1);
 };
 
 price.value = localStorage.getItem("price") || 200;
@@ -964,10 +1084,78 @@ start.onclick = async (...args) => {
   if (didLog) await askUrgePopup();
 };
 
+/* ---- TIMER TAB ENHANCEMENTS ---- */
+
+function enhanceTimer() {
+  const card = document.querySelector("#tab-timer .card");
+  if (!card) return;
+
+  let extra = document.getElementById("timer-extra");
+  if (!extra) {
+    extra = document.createElement("div");
+    extra.id = "timer-extra";
+    extra.style.marginTop = "10px";
+    card.appendChild(extra);
+  }
+
+  const d = daily();
+  const k = new Date().toDateString();
+  const todayCount = d[k] || 0;
+  const lim = parseInt(limit.value || 8);
+
+  // cigarettes left today
+  const left = Math.max(0, lim - todayCount);
+
+  // cooldown recommender (slightly pushes user, but realistic)
+  const gaps = history()
+    .slice(0, 8)
+    .map((t, i, a) => (a[i + 1] ? Math.floor((t - a[i + 1]) / 60000) : null))
+    .filter(Boolean);
+
+  const avg = gaps.length
+    ? Math.round(
+        gaps.reduce((a, b) => a + b, 0) / gaps.length + 5 /* tiny push */
+      )
+    : minutes;
+
+  // motivational tip
+  let tip = "Log urges when they happen — they reveal triggers.";
+  if (left === 0) tip = "Limit reached — focus on stretching the gaps. 💪";
+  else if (streakDays() >= 5) tip = "Great streak. Tiny increases work best.";
+  else if (avg > minutes) tip = "You’re already improving — keep going.";
+  else if (todayCount === 0) tip = "Perfect start today. Stay steady.";
+
+  extra.innerHTML = `
+    <div class="funCard">⏳ Suggested next cooldown — <span>${avg} min</span></div>
+    <div class="funCard">📦 Cigarettes left today — <span>${left}</span></div>
+    <div class="funCard">💡 Tip — <span>${tip}</span></div>
+  `;
+}
+
+function coolingMessage(remMs) {
+  const mins = Math.ceil(remMs / 60000);
+  const s = streakDays();
+
+  const list = [
+    "Buying you some willpower…",
+    "Your lungs are loving this 😌",
+    "Cravings fade — you don’t.",
+    "Stretching the gap = winning.",
+    "Future-you says thanks 🙏",
+    "Breathe. You’ve got this.",
+  ];
+
+  if (mins <= 1) return "Almost there… stay with it 👀";
+  if (mins <= 5) return "Short cooldown — perfect discipline.";
+  if (s >= 5) return "Streak mindset — small wins stack 💪";
+  return list[Math.floor(Date.now() / 5000) % list.length];
+}
+
 // init
 (function init() {
   renderPresets();
   updateCounts();
+  enhanceTimer();
 
   if (localStorage.getItem("until")) {
     start.style.display = "none";

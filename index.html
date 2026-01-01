@@ -133,8 +133,37 @@
           <div class="metricBox">
             <div class="row">
               <span>Daily limit</span>
-              <input id="limit" type="range" min="1" max="40" />
+
+              <div
+                id="limitStepper"
+                style="display: flex; align-items: center; gap: 8px"
+              >
+                <button
+                  id="limitMinus"
+                  class="btn"
+                  style="width: 32px; padding: 6px"
+                >
+                  −
+                </button>
+
+                <div
+                  id="limitDisplay"
+                  style="min-width: 48px; text-align: center; font-weight: 600"
+                >
+                  0
+                </div>
+
+                <button
+                  id="limitPlus"
+                  class="btn"
+                  style="width: 32px; padding: 6px"
+                >
+                  +
+                </button>
+              </div>
             </div>
+
+            <input id="limit" type="hidden" />
 
             <div class="sub" id="limitLabel" style="text-align: right">
               0 / day
