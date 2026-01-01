@@ -39,23 +39,26 @@
           <div class="sub">One cigarette per cooldown</div>
 
           <div id="since" class="info"></div>
+          <div class="timerSection">
+            <div class="circle">
+              <svg>
+                <circle class="bg" cx="95" cy="95" r="80"></circle>
+                <circle id="ring" class="fg" cx="95" cy="95" r="80"></circle>
+              </svg>
+              <div id="time" class="timerText">00:00</div>
+            </div>
 
-          <div class="circle">
-            <svg>
-              <circle class="bg" cx="95" cy="95" r="80"></circle>
-              <circle id="ring" class="fg" cx="95" cy="95" r="80"></circle>
-            </svg>
-            <div id="time" class="timerText">00:00</div>
+            <button id="start" class="btn primary">Start</button>
+            <button id="pause" class="btn secondary" style="display: none">
+              Pause
+            </button>
+            <button id="reset" class="btn danger">Reset</button>
           </div>
 
-          <button id="start" class="btn primary">Start</button>
-          <button id="pause" class="btn secondary" style="display: none">
-            Pause
-          </button>
-          <button id="reset" class="btn danger">Reset</button>
-
           <div id="presets" class="pills"></div>
-          <div id="status" class="info"></div>
+          <div id="status" class="info">
+            <span id="statusText"></span>
+          </div>
 
           <button id="skip" class="btn">👍 Skip this cigarette</button>
           <div class="miniDisclaimer">

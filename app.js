@@ -647,6 +647,7 @@ function notify() {
     new Notification("Cooldown done", { body: "You can smoke now" });
 
   show("Cooldown finished");
+  ring.classList.remove("cooling");
 }
 
 // timer engine
@@ -673,6 +674,9 @@ function tick(end, total) {
     .toString()
     .padStart(2, "0")}`;
   ring.style.strokeDashoffset = CIRC * (1 - rem / total);
+  if (!paused) ring.classList.add("cooling");
+  else ring.classList.remove("cooling");
+
   status.textContent = paused ? "Paused" : coolingMessage(rem);
 
   enhanceTimer();
