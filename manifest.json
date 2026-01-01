@@ -1,6 +1,6 @@
 {
-  "name": "Smoke Timer",
-  "short_name": "Timer",
+  "name": "Assist you",
+  "short_name": "Assist you",
   "start_url": "/Test/",
   "scope": "/Test/",
   "display": "standalone",
