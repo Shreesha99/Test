@@ -54,6 +54,14 @@ const history = () => jget("history", []);
 const urgeLog = () => jget("urgeLog", []);
 const skipLog = () => jget("skips", []);
 
+function formatMinutes(m) {
+  m = Math.round(m);
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60);
+  const mm = m % 60;
+  return mm ? `${h}h ${mm}m` : `${h}h`;
+}
+
 function show(m) {
   toast.textContent = m;
   toast.classList.add("show");
@@ -119,8 +127,7 @@ function longestGap() {
   }
 
   const m = Math.floor(best / 60000);
-  const hh = Math.floor(m / 60);
-  return hh ? `${hh}h ${m % 60}m` : `${m}m`;
+  return formatMinutes(m);
 }
 
 function achievementToast(msg) {
@@ -225,7 +232,8 @@ function updateMoneyAndHealth() {
     (x) => new Date(x).toDateString() === k
   ).length;
 
-  timeSaved.textContent = `${skips * minutes} min saved`;
+  timeSaved.textContent = `${formatMinutes(skips * minutes)} saved`;
+
   $("skipsCount").textContent = `${skips} skipped`;
 
   const lim = parseInt(limit.value || 8),
@@ -1130,7 +1138,9 @@ function enhanceTimer() {
   else if (todayCount === 0) tip = "Perfect start today. Stay steady.";
 
   extra.innerHTML = `
-    <div class="funCard">⏳ Suggested next cooldown — <span>${avg} min</span></div>
+    <div class="funCard">⏳ Suggested next cooldown — <span>${formatMinutes(
+      avg
+    )}</span></div>
     <div class="funCard">📦 Cigarettes left today — <span>${left}</span></div>
     <div class="funCard">💡 Tip — <span>${tip}</span></div>
   `;
