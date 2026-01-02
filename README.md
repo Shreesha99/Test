@@ -1,55 +1,184 @@
-# 🚭 Assist-You (Smoke Timer)
+# 🚭 Smoke Timer — Harm Reduction Cooldown App
 
-**Assist-You** is a lightweight, privacy-focused Progressive Web App (PWA) designed as a harm-reduction tool. It helps users gain control over smoking habits by enforcing "cooldown" periods between logs, tracking daily intake, and visualizing long-term recovery patterns.
+Smoke Timer is a **progressive harm-reduction web app** that helps reduce smoking frequency by enforcing **cooldown periods** between cigarettes and tracking behavior, urges, and progress over time.
 
----
-
-## ✨ Key Features
-
-### ⏱️ Smart Cooldown Timer
-- **Visual Countdown:** Features a circular SVG progress ring that tracks your current cooldown.
-- **Preset Intervals:** Quick-select buttons for 45m, 60m, or 90m gaps.
-- **Skip Logic:** Includes a "Skip this cigarette" feature to reinforce positive behavior.
-
-### 📊 Deep Analytics & Insights
-- **Financial & Health Tracking:** Calculates money spent and "life-time" lost based on your specific cigarette pack price and currency.
-- **Urge Mapping:** Log the intensity of cravings and identify triggers (e.g., Coffee, Stress, Social, Boredom).
-- **Risk Analysis:** Automatically identifies your "Most Risky Hour" based on historical data.
-
-### 🏆 Progress & Achievements
-- **Streak System:** Tracks consecutive days stayed under your self-defined daily limit.
-- **Milestones:** Visual progress bars for 3, 7, 14, and 30-day goals.
-- **Weekly Comparison:** Compare this week's performance against the previous week with percentage-based improvement metrics.
-
-### ☁️ Data & Privacy
-- **Local First:** All data is stored in your browser's `localStorage`.
-- **Google Drive Sync:** Integrated backup and restore functionality using the Google Drive API.
-- **Export/Import:** Manual JSON file handling for total data portability.
+> ⚠️ This app is **not medical advice**.  
+> It does **not encourage smoking** — the goal is to increase gaps, reduce dependency, and build control.
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Core Features
 
-This project is built purely with **Vanilla Web Technologies**, ensuring maximum speed and offline capability without the overhead of heavy frameworks.
+### ⏳ Cooldown Timer
+- Log a cigarette to start a cooldown
+- Circular animated progress ring
+- Pause / Resume / Reset
+- Smart motivational messages
+- Suggested next cooldown based on history
 
-* **HTML5:** Semantic structure and SVG-based UI elements.
-* **CSS3:** Modular architecture (Base, Layout, Timer, Analytics, etc.) with CSS variables for **Night Mode**.
-* **JavaScript (ES6+):** Pure JS logic for state management, charting, and calculations.
-* **PWA:** Manifest and service worker ready for "Add to Home Screen" support on iOS and Android.
+### 📅 Daily Tracking
+- Cigarettes smoked today
+- Daily limit indicator
+- Longest cooldown gap
+- Skipped cigarettes
+- Time saved
+- Money spent
+- Health approximations (life minutes, steps)
+
+### 📈 Progress
+- 7-day bar chart
+- Weekly averages
+- Best day
+- Week-over-week comparison
+- Streak tracking
+
+### 🧠 Urge Logging & Insights
+- Urge strength (1–5)
+- Trigger reasons (coffee, stress, boredom, etc.)
+- Most risky hours
+- Urge pressure score
+- Behavioral insights & tips
+
+### 🏆 Achievements
+- 3-day, 7-day, 14-day, 30-day streaks
+- Auto-unlock with confetti celebration
+
+### ⚙️ Settings
+- Daily cigarette limit
+- Cooldown presets
+- Currency selection
+- Cost per pack
+- Cigarettes per pack
+- Night mode (auto/manual)
+- Sound & silent mode
+- Notifications
+- Import / Export data
+- Undo & clear data actions
+
+### 📱 Progressive Web App (PWA)
+- Installable
+- Offline support
+- Service worker
+- Local storage persistence
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-assist-you/
-├── index.html          # Core application & Tab structure
-├── app.js              # State management & timer logic
-├── drive.js            # Google Drive API & Backup logic
-├── manifest.json       # PWA metadata for mobile installation
-└── style/              # Modular CSS system
-    ├── base.css        # Resets & Global Variables
-    ├── timer.css       # SVG Ring animations
-    ├── analytics.css   # Progress bars & metric cards
-    ├── settings.css    # Form elements & steppers
-    └── ...             # Tab-specific styling
+Test/
+├─ style/
+│ ├─ analytics.css
+│ ├─ base.css
+│ ├─ components.css
+│ ├─ layout.css
+│ ├─ popups.css
+│ ├─ settings.css
+│ ├─ tabs.css
+│ └─ timer.css
+├─ app.js
+├─ drive.js
+├─ index.html
+├─ manifest.json
+├─ style.css
+└─ sw.js
+
+```
+
+
+
+---
+
+## 🧭 App Architecture Overview
+
+### index.html
+Defines:
+- App shell
+- Tabs (Timer, Today, Progress, Insights, Settings)
+- Modals (confirm, urge logging, picker, disclaimer)
+- Toasts & overlays
+- Audio & notification hooks
+
+Tab switching is handled via CSS class toggling.
+
+---
+
+### Styling (`/style`)
+CSS is split by responsibility:
+- `base.css` → typography, colors, resets
+- `layout.css` → app layout & spacing
+- `components.css` → buttons, cards, pills
+- `timer.css` → circular timer visuals
+- `tabs.css` → bottom navigation
+- `popups.css` → overlays & dialogs
+- `settings.css` → controls & forms
+- `analytics.css` → charts & insight cards
+
+---
+
+### app.js (Core Logic)
+
+Handles:
+- Timer engine
+- LocalStorage persistence
+- Daily logs & history
+- Streak calculations
+- Achievements
+- Charts
+- Insights & analytics
+- Notifications
+- Confetti animation
+- Import / Export
+- UX enhancements
+
+All state is stored locally using `localStorage`.
+
+---
+
+### drive.js
+Prepares Google Sign-In and Drive API integration:
+- Backup
+- Restore
+- Authentication
+
+(UI ready, backend integration ongoing.)
+
+---
+
+## 🔔 Notifications
+
+- Daily reminder (10 AM)
+- Cooldown completion alerts
+- Optional vibration
+- Optional sound
+
+Permissions requested automatically.
+
+---
+
+## 🔄 Backup & Restore
+
+### Export
+Downloads a JSON file containing:
+- daily logs
+- history
+- presets
+- urge logs
+- skips
+
+### Import
+Restores data from a valid JSON backup.
+
+---
+
+## ⚠️ Disclaimer
+
+Smoke Timer is a **harm-reduction tool**, not a medical product.
+
+It aims to:
+- Increase time between cigarettes
+- Reduce daily intake
+- Build awareness of triggers
+- Encourage gradual improvement
+
+Use at your own discretion.
