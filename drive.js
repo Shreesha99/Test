@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "424180784069-bo0lo5dms4vcn59mianh5j7oa85nioou.apps.googleusercontent.com";
 
   const API_KEY = "AIzaSyBjN0DWe-DASx8aOv4jrq0YIbv3Vsf56R8";
-  const SCOPE = "https://www.googleapis.com/auth/drive.file";
+  const SCOPE =
+    "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata";
 
   const driveLogin = $("driveLogin");
   const driveBackup = $("driveBackup");
@@ -187,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
             JSON.stringify({
               name: "smoketimer-backup.json",
               mimeType: "application/json",
+              parents: ["appDataFolder"],
             }),
           ],
           { type: "application/json" }
@@ -233,8 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const res = await gapi.client.drive.files.list({
         q: "name='smoketimer-backup.json'",
+        spaces: "appDataFolder",
         fields: "files(id,name)",
-        spaces: "drive",
       });
 
       if (!res.result.files?.length) {
