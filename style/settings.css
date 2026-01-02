@@ -270,6 +270,6 @@ select {
   font-size: 0.78rem;
 }
 
-.metricBox.actionGrid > :not(:first-child) {
+.backupGird > :not(:first-child) {
   display: none;
 }
