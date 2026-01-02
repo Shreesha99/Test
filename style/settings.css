@@ -269,3 +269,7 @@ select {
   color: #aaa;
   font-size: 0.78rem;
 }
+
+.metricBox.actionGrid > :not(:first-child) {
+  display: none;
+}

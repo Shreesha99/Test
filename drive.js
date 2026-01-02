@@ -2,9 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let googleUser = null;
 
   const CLIENT_ID =
-    "424180784069-bo0lo5dms4vcn59mianh5j7oa85nioou.apps.googleusercontent.com";
+    "908085755250-k8dh2ksmhclai7es3nlu14q12imlut8b.apps.googleusercontent.com";
 
-  const API_KEY = "AIzaSyBjN0DWe-DASx8aOv4jrq0YIbv3Vsf56R8";
+  const API_KEY = "AIzaSyAVccOibQX5gzH5dVpgiEOZn6bc9qxxYpo";
   const SCOPE =
     "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata";
 

@@ -871,7 +871,13 @@ function saveLimit(v) {
   limit.value = v;
   limitDisplay.textContent = v;
   localStorage.setItem("limit", v);
+
+  updateLimitLabel();
   updateCounts();
+
+  enhanceTimer();
+  enhanceInsights();
+  draw();
 }
 
 limitMinus.onclick = () => {
