@@ -225,9 +225,10 @@
             </select>
 
             <select id="currency" style="display: none">
-              <option value="₹">₹</option>
-              <option value="$">$</option>
-              <option value="€">€</option>
+              <option value="inr">₹ Rupee</option>
+              <option value="usd">$ Dollar</option>
+              <option value="eur">€ Euro</option>
+              <option value="gbp">£ Pound</option>
             </select>
 
             <input
@@ -473,7 +474,6 @@
 
       pickerClose.onclick = () => (pickerWrap.style.display = "none");
 
-      // SOUND
       soundBtn.onclick = () => {
         openPicker(
           "Select sound",
@@ -483,21 +483,30 @@
             { value: "off", icon: "bi bi-volume-mute", label: "Off" },
           ],
           soundSel.value,
-          (v) => (soundSel.value = v)
+          (v) => {
+            soundSel.value = v;
+            localStorage.setItem("sound", v);
+            updateSoundButton();
+          }
         );
       };
 
-      // CURRENCY
       currencyBtn.onclick = () => {
         openPicker(
           "Choose currency",
           [
-            { value: "₹", icon: "bi bi-currency-rupee", label: "Rupee" },
-            { value: "$", icon: "bi bi-currency-dollar", label: "Dollar" },
-            { value: "€", icon: "bi bi-currency-euro", label: "Euro" },
+            { value: "inr", icon: "bi bi-currency-rupee", label: "Rupee" },
+            { value: "usd", icon: "bi bi-currency-dollar", label: "Dollar" },
+            { value: "eur", icon: "bi bi-currency-euro", label: "Euro" },
+            { value: "gbp", icon: "bi bi-currency-pound", label: "Pound" },
           ],
-          currency.value,
-          (v) => (currency.value = v)
+          currencySel.value,
+          (v) => {
+            currencySel.value = v;
+            localStorage.setItem("currency", v);
+            updateMoneyAndHealth();
+            updateCurrencyButton();
+          }
         );
       };
     </script>

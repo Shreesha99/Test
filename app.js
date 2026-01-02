@@ -223,7 +223,7 @@ function updateMoneyAndHealth() {
     n = d[k] || 0;
   const perCig =
     parseFloat(price.value || 200) / parseFloat(perpack.value || 20);
-  const cur = currencySel.value || "₹";
+  const cur = getCurrencySymbol(currencySel.value || "inr");
   moneyToday.textContent = cur + (n * perCig).toFixed(0);
   lifeToday.textContent = `~${n * 11} min`;
   stepsToday.textContent = `~${(n * 700).toLocaleString()} steps`;
@@ -896,19 +896,33 @@ perpack.onchange = () => {
   updateMoneyAndHealth();
 };
 
-currencySel.value = localStorage.getItem("currency") || "₹";
+currencySel.value = localStorage.getItem("currency") || "inr";
+
 currencySel.onchange = () => {
   localStorage.setItem("currency", currencySel.value);
   updateMoneyAndHealth();
+  updateCurrencyButton();
 };
 
 soundSel.value = localStorage.getItem("sound") || "ding";
-soundSel.onchange = () => localStorage.setItem("sound", soundSel.value);
+soundSel.onchange = () => {
+  localStorage.setItem("sound", soundSel.value);
+  updateSoundButton();
+};
+
+function updateCurrencyButton() {
+  const btn = document.getElementById("currencyBtn");
+  if (!btn) return;
+  btn.querySelector("span").textContent = getCurrencySymbol(currencySel.value);
+}
 
 manualNight.checked = localStorage.getItem("manualNight") === "true";
 manualNight.onchange = () => {
   localStorage.setItem("manualNight", manualNight.checked);
   applyNightMode();
+
+  const btn = document.getElementById("nightBtn");
+  if (btn) btn.classList.toggle("active", manualNight.checked);
 };
 
 // export
@@ -947,6 +961,17 @@ file.onchange = (e) => {
     }
   });
 };
+
+function updateSoundButton() {
+  const btn = document.getElementById("soundBtn");
+  if (!btn) return;
+
+  const v = soundSel.value;
+  const label =
+    v === "ding" ? "Ding" : v === "soft" ? "Soft" : v === "off" ? "Silent" : v;
+
+  btn.querySelector("span").textContent = label;
+}
 
 // undo
 undo.onclick = () => {
@@ -1216,11 +1241,24 @@ function coolingMessage(remMs) {
   return list[Math.floor(Date.now() / 5000) % list.length];
 }
 
+function getCurrencySymbol(v) {
+  return (
+    {
+      inr: "₹",
+      usd: "$",
+      eur: "€",
+      gbp: "£",
+    }[v] || v
+  );
+}
+
 // init
 (function init() {
   renderPresets();
   updateCounts();
   enhanceTimer();
+  updateSoundButton();
+  updateCurrencyButton();
 
   if (localStorage.getItem("until")) {
     start.style.display = "none";

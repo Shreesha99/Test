@@ -1,3 +1,5 @@
+/* ================= BASE ROW + INPUT ================= */
+
 .row {
   display: flex;
   justify-content: space-between;
@@ -15,18 +17,23 @@ select {
   border-radius: 8px;
 }
 
+/* ================= SECTION TITLES ================= */
+
 .settingsGroupTitle {
   margin: 14px 0 6px;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  opacity: 0.55;
+  font-weight: 700;
+  opacity: 0.6;
 }
+
 .dangerTitle {
   color: #f87171;
 }
 
-/* toggle */
+/* ================= TOGGLE ================= */
+
 .toggle {
   appearance: none;
   width: 34px;
@@ -53,7 +60,8 @@ select {
   transform: translateX(14px);
 }
 
-/* action options */
+/* ================= ACTION GRID ================= */
+
 .actionGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -62,38 +70,46 @@ select {
 
 .actionBtn {
   background: #0d0d0d;
-  border: 1px solid #2a2a2a;
+  border: 1px solid #242424;
   border-radius: 14px;
   padding: 10px 6px;
   text-align: center;
   cursor: pointer;
   transition: 0.15s;
 }
+
 .actionBtn i {
   font-size: 1.3rem;
   display: block;
   margin-bottom: 4px;
 }
+
 .actionBtn span {
-  font-size: 0.7rem;
-  opacity: 0.85;
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 .actionBtn.active {
-  background: #1b2a1b;
+  background: #112214;
   border-color: #2f4f2f;
 }
 
+/* Danger actions */
 .dangerAct {
   border-color: #4a1b1b;
   background: #1a0b0b;
 }
+.dangerAct:hover {
+  background: #221010;
+}
 .dangerAct i,
 .dangerAct span {
   color: #f87171;
+  font-weight: 600;
 }
 
-/* ================= SETTINGS TAB POLISH ================= */
+/* ================= CARD POLISH ================= */
 
 #tab-settings .card {
   background: linear-gradient(180deg, #141414, #0d0d0d);
@@ -106,65 +122,44 @@ select {
   margin-top: 14px;
 }
 
-/* Section label rhythm */
-#tab-settings .settingsGroupTitle {
-  margin: 18px 0 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  opacity: 0.55;
-}
-
-/* Group container look */
 #tab-settings .metricBox {
-  padding: 12px 12px;
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
   background: #0e0e0e;
 }
 
-/* Row alignment */
+/* ================= ROW TYPOGRAPHY ================= */
+
 #tab-settings .row {
   margin: 8px 0;
-  font-size: 0.84rem;
 }
 
-/* Inline inputs */
+#tab-settings .row span:first-child {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+#tab-settings .sub,
+#tab-settings #limitLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+/* Inputs */
 #tab-settings input[type="number"],
 #tab-settings select {
   background: #0b0b0b;
   border: 1px solid #2a2a2a;
   border-radius: 10px;
   padding: 6px 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 
-/* Icon grid buttons */
-#tab-settings .actionGrid {
-  margin-top: 6px;
-}
-
-#tab-settings .actionBtn {
-  background: #0d0d0d;
-  border-radius: 14px;
-  border: 1px solid #242424;
-}
-
-#tab-settings .actionBtn.active {
-  background: #112214;
-  border-color: #2f4f2f;
-}
-
-#tab-settings .actionBtn span {
-  font-size: 0.72rem;
-}
-
-/* Reminders — slightly special feeling */
-#tab-settings .actionBtn#reminder.active {
-  border-color: #3b82f6;
-  background: #0b1e39;
-}
-
-/* Stepper inputs (daily limit) */
+/* Stepper */
 #tab-settings #limitStepper button {
   background: #1a1a1a;
   border: 1px solid #2b2b2b;
@@ -176,28 +171,100 @@ select {
   font-weight: 700;
 }
 
-/* Hidden selects still feel part of layout */
+/* Hidden selects alignment */
 #tab-settings #soundSel,
 #tab-settings #currency {
   margin-top: 6px;
 }
 
-/* Danger zone */
-#tab-settings .dangerTitle {
-  color: #f87171;
+/* ================= REMINDER SPECIAL ================= */
+
+#tab-settings .actionBtn#reminder.active {
+  border-color: #3b82f6;
+  background: #0b1e39;
 }
 
-#tab-settings .dangerAct {
-  background: #190b0b;
-  border-color: #442020;
+/* ================= FILE UPLOAD (FINAL PERFECT VERSION) ================= */
+
+#tab-settings .metricBox .row {
+  align-items: center;
+  gap: 10px;
 }
 
-#tab-settings .dangerAct:hover {
-  background: #221010;
+#tab-settings .metricBox .row span:first-child {
+  flex: 0 0 110px;
 }
 
-/* File upload row consistency */
+/* Base */
 #tab-settings input[type="file"] {
-  font-size: 0.75rem;
+  flex: 1;
+  font-size: 0.78rem;
+  color: #bbb;
+  position: relative;
+  appearance: none;
+  border: none;
+  height: 32px;
+}
+
+/* Hide default */
+#tab-settings input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+
+/* Custom button */
+#tab-settings input[type="file"]::before {
+  content: "Choose file";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  color: #e5e5e5;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+#tab-settings input[type="file"]:hover::before {
+  background: #181818;
+}
+
+/* Align Import row like a normal input row */
+#tab-settings .metricBox .row.import-row {
+  justify-content: space-between;
+}
+
+/* Wrap file input so it behaves like one unit */
+#tab-settings .fileWrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+/* Hide native label text */
+#tab-settings input[type="file"] {
+  max-width: 210px;
+}
+
+/* Fix "No file chosen" text alignment */
+#tab-settings input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+
+#tab-settings input[type="file"]::before {
+  content: "Choose file";
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#tab-settings input[type="file"] {
   color: #aaa;
+  font-size: 0.78rem;
 }
